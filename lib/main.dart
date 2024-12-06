@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
 class MacOSDock extends StatefulWidget {
   const MacOSDock({super.key, required this.items});
 
