@@ -29,7 +29,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class MacOSDock extends StatefulWidget {
   const MacOSDock({super.key, required this.items});
 
@@ -38,6 +37,7 @@ class MacOSDock extends StatefulWidget {
   @override
   State<MacOSDock> createState() => _MacOSDockState();
 }
+
 class _MacOSDockState extends State<MacOSDock> {
   late List<IconData> dockItems;
   IconData? draggingItem;
@@ -75,7 +75,8 @@ class _MacOSDockState extends State<MacOSDock> {
 
             return Draggable<IconData>(
               data: dockItems[index],
-              feedback: _buildDockItem(dockItems[index], index, isDragging: true),
+              feedback:
+                  _buildDockItem(dockItems[index], index, isDragging: true),
               childWhenDragging: const SizedBox.shrink(),
               onDragStarted: () {
                 setState(() {
@@ -102,7 +103,8 @@ class _MacOSDockState extends State<MacOSDock> {
                   // Use AnimatedScale for smoother animation
                   return AnimatedScale(
                     scale: isHovering ? 1.2 : 1.0, // Scale up when hovered
-                    duration: const Duration(milliseconds: 200), // Slow down the animation
+                    duration: const Duration(
+                        milliseconds: 200), // Slow down the animation
                     curve: Curves.easeInOut, // Smooth easing curve
                     child: _buildDockItem(dockItems[index], index),
                   );
@@ -115,14 +117,13 @@ class _MacOSDockState extends State<MacOSDock> {
     );
   }
 
-
   Widget _buildDockItem(IconData icon, int index, {bool isDragging = false}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       width: 48,
       height: 48,
       decoration: BoxDecoration(
-        color:  Colors.primaries[index % Colors.primaries.length],
+        color: Colors.primaries[index % Colors.primaries.length],
         borderRadius: BorderRadius.circular(8),
       ),
       child: Icon(
