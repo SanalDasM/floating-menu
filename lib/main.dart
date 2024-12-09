@@ -13,14 +13,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.grey[900],
-        body: const Center(
+        body: Center(
           child: MacOSDock(
             items: [
-              Icons.person,
-              Icons.message,
-              Icons.call,
-              Icons.camera,
-              Icons.photo,
+              DockItem(icon: Icons.person, color: Colors.blue),
+              DockItem(icon: Icons.message, color: Colors.green),
+              DockItem(icon: Icons.call, color: Colors.red),
+              DockItem(icon: Icons.camera, color: Colors.orange),
+              DockItem(icon: Icons.photo, color: Colors.purple),
             ],
           ),
         ),
@@ -29,18 +29,25 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class DockItem {
+  final IconData icon;
+  final Color color;
+
+  DockItem({required this.icon, required this.color});
+}
+
 class MacOSDock extends StatefulWidget {
   const MacOSDock({super.key, required this.items});
 
-  final List<IconData> items;
+  final List<DockItem> items;
 
   @override
   State<MacOSDock> createState() => _MacOSDockState();
 }
 
 class _MacOSDockState extends State<MacOSDock> {
-  late List<IconData> dockItems;
-  IconData? draggingItem;
+  late List<DockItem> dockItems;
+  DockItem? draggingItem;
   int? hoverIndex;
 
   @override
@@ -73,10 +80,9 @@ class _MacOSDockState extends State<MacOSDock> {
           children: List.generate(dockItems.length, (index) {
             final isHovering = hoverIndex == index;
 
-            return Draggable<IconData>(
+            return Draggable<DockItem>(
               data: dockItems[index],
-              feedback:
-                  _buildDockItem(dockItems[index], index, isDragging: true),
+              feedback: _buildDockItem(dockItems[index], isDragging: true),
               childWhenDragging: const SizedBox.shrink(),
               onDragStarted: () {
                 setState(() {
@@ -88,7 +94,7 @@ class _MacOSDockState extends State<MacOSDock> {
                   draggingItem = null;
                 });
               },
-              child: DragTarget<IconData>(
+              child: DragTarget<DockItem>(
                 onWillAcceptWithDetails: (data) => true,
                 onAcceptWithDetails: (d) {
                   final data = d.data;
@@ -101,13 +107,11 @@ class _MacOSDockState extends State<MacOSDock> {
                   });
                 },
                 builder: (context, candidateData, rejectedData) {
-                  // Use AnimatedScale for smoother animation
                   return AnimatedScale(
-                    scale: isHovering ? 1.2 : 1.0, // Scale up when hovered
-                    duration: const Duration(
-                        milliseconds: 200), // Slow down the animation
-                    curve: Curves.easeInOut, // Smooth easing curve
-                    child: _buildDockItem(dockItems[index], index),
+                    scale: isHovering ? 1.2 : 1.0,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeInOut,
+                    child: _buildDockItem(dockItems[index]),
                   );
                 },
               ),
@@ -118,17 +122,17 @@ class _MacOSDockState extends State<MacOSDock> {
     );
   }
 
-  Widget _buildDockItem(IconData icon, int index, {bool isDragging = false}) {
+  Widget _buildDockItem(DockItem dockItem, {bool isDragging = false}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       width: 48,
       height: 48,
       decoration: BoxDecoration(
-        color: Colors.primaries[index % Colors.primaries.length],
+        color: dockItem.color, // Fixed color for each icon
         borderRadius: BorderRadius.circular(8),
       ),
       child: Icon(
-        icon,
+        dockItem.icon,
         color: Colors.white,
       ),
     );
