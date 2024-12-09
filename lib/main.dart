@@ -68,54 +68,48 @@ class _MacOSDockState extends State<MacOSDock> {
           borderRadius: BorderRadius.circular(16),
           color: Colors.black12,
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-           const Text("Test",style: TextStyle(color: Colors.white),),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(dockItems.length, (index) {
-                final isHovering = hoverIndex == index;
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: List.generate(dockItems.length, (index) {
+            final isHovering = hoverIndex == index;
 
-                return Draggable<IconData>(
-                  data: dockItems[index],
-                  feedback: _buildDockItem(dockItems[index], index, isDragging: true),
-                  childWhenDragging: const SizedBox.shrink(),
-                  onDragStarted: () {
-                    setState(() {
-                      draggingItem = dockItems[index];
-                    });
-                  },
-                  onDragCompleted: () {
-                    setState(() {
-                      draggingItem = null;
-                    });
-                  },
-                  child: DragTarget<IconData>(
-                    onWillAcceptWithDetails: (data) => true,
-                    onAccept: (data) {
-                      setState(() {
-                        final draggedIndex = dockItems.indexOf(data);
-                        if (draggedIndex != index) {
-                          dockItems.removeAt(draggedIndex);
-                          dockItems.insert(index, data);
-                        }
-                      });
-                    },
-                    builder: (context, candidateData, rejectedData) {
-                      // Use AnimatedScale for smoother animation
-                      return AnimatedScale(
-                        scale: isHovering ? 1.2 : 1.0, // Scale up when hovered
-                        duration: const Duration(milliseconds: 200), // Slow down the animation
-                        curve: Curves.easeInOut, // Smooth easing curve
-                        child: _buildDockItem(dockItems[index], index),
-                      );
-                    },
-                  ),
-                );
-              }),
-            ),
-          ],
+            return Draggable<IconData>(
+              data: dockItems[index],
+              feedback: _buildDockItem(dockItems[index], index, isDragging: true),
+              childWhenDragging: const SizedBox.shrink(),
+              onDragStarted: () {
+                setState(() {
+                  draggingItem = dockItems[index];
+                });
+              },
+              onDragCompleted: () {
+                setState(() {
+                  draggingItem = null;
+                });
+              },
+              child: DragTarget<IconData>(
+                onWillAcceptWithDetails: (data) => true,
+                onAccept: (data) {
+                  setState(() {
+                    final draggedIndex = dockItems.indexOf(data);
+                    if (draggedIndex != index) {
+                      dockItems.removeAt(draggedIndex);
+                      dockItems.insert(index, data);
+                    }
+                  });
+                },
+                builder: (context, candidateData, rejectedData) {
+                  // Use AnimatedScale for smoother animation
+                  return AnimatedScale(
+                    scale: isHovering ? 1.2 : 1.0, // Scale up when hovered
+                    duration: const Duration(milliseconds: 200), // Slow down the animation
+                    curve: Curves.easeInOut, // Smooth easing curve
+                    child: _buildDockItem(dockItems[index], index),
+                  );
+                },
+              ),
+            );
+          }),
         ),
       ),
     );
