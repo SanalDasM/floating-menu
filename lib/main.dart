@@ -90,7 +90,8 @@ class _MacOSDockState extends State<MacOSDock> {
               },
               child: DragTarget<IconData>(
                 onWillAcceptWithDetails: (data) => true,
-                onAccept: (data) {
+                onAcceptWithDetails: (d) {
+                  final data = d.data;
                   setState(() {
                     final draggedIndex = dockItems.indexOf(data);
                     if (draggedIndex != index) {
